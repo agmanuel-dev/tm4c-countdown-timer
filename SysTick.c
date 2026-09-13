@@ -1,7 +1,7 @@
 #include "SysTick.h"
 #include "tm4c123gh6pm.h"
 
-// Used by the interrupt hnadler
+// Used by the optional interrupt handler (not the countdown main loop)
 volatile uint32_t g_handler_calls;
 
 // Initialize SysTick 
@@ -47,7 +47,7 @@ void SysTick_Delay2s_50MHz(void){
     }
 }
 
-// Optional interrupt handler
+// Optional coursework interrupt handler; toggles pins used by the countdown display
 void SysTick_Handler(void){
     g_handler_calls++;
     if((g_handler_calls % 50) == 0){

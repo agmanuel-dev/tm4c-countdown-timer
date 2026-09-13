@@ -21,14 +21,14 @@ static const uint8_t segment_map[10] = {
 
 
 // Pin definitions
-#define BUTTON_PIN   (1U<<4)   // PF4, external 10 kO pull-down + pushbutton to +3.3 V
+#define BUTTON_PIN   (1U<<4)   // PF4, external 10 kilohm pull-down + pushbutton to +3.3 V
 #define IND_LED_PIN  (1U<<4)   // PB4, indicator LED
 
 
 // Initialize Port F: PF1-PF3 
 static void PortF_Init(void){
     SYSCTL_RCGCGPIO_R |= (1U<<5);               // enable clock to GPIO
-    while((SYSCTL_PRGPIO_R & (1U<<5)) == 0){}   // Here I wait
+    while((SYSCTL_PRGPIO_R & (1U<<5)) == 0){}   // Wait for GPIO peripheral readiness
 
     // PF1, PF2, PF3 = outputs for segments A, B, C
     GPIO_PORTF_DIR_R  |= (1U<<1)|(1U<<2)|(1U<<3);
@@ -43,12 +43,12 @@ static void PortF_Init(void){
 // Initialize Port B: PB0-PB3 = segments D-G outputs, PB4 = for LED output
 static void PortB_Init(void){
     SYSCTL_RCGCGPIO_R |= (1U<<1);               // enable clock to GPIO
-    while((SYSCTL_PRGPIO_R & (1U<<1)) == 0){}   // Wait again
+    while((SYSCTL_PRGPIO_R & (1U<<1)) == 0){}   // Wait for GPIO peripheral readiness
 
     // PB0-PB3 = outputs for segments D-G for the digital display
     // PB4    = output for LED
     GPIO_PORTB_DIR_R  |= 0x1F;   // bits 0-4
-    GPIO_PORTB_DEN_R  |= 0x1F;   // digital enable for thwe bits
+    GPIO_PORTB_DEN_R  |= 0x1F;   // Digital enable for bits 0-4
 }
 
 
@@ -65,7 +65,7 @@ static void displayDigitStatic(int value){
 
 // Fade-in LED on PB4 over 2 seconds using PWM
 static void FadeIn_LED(void) {
-    const uint32_t steps = 100;      //cycle steps from 0% to 100%
+    const uint32_t steps = 100;      // 100 periods; integer timing yields 0-95% duty before the full-on hold
     const uint32_t period_ms = 20;   // 20 ms PWM period
 		uint32_t s;
     for (s = 0; s < steps; s++) {
@@ -94,8 +94,7 @@ int main(void){
     PortB_Init();        // segments D-G, indicator LED
     SysTick_Init();      // for the 1 ms delay
 
-    // Here i want to make sure
-	// indicator LED (PB4) is off initially
+    // Indicator LED (PB4) is off initially
     GPIO_PORTB_DATA_R &= ~IND_LED_PIN;
 
     while(1){
@@ -105,7 +104,7 @@ int main(void){
             for(ms = 0; ms < 20; ms++) SysTick_Delay1ms_16MHz();
             if (!(GPIO_PORTF_DATA_R & BUTTON_PIN)) continue;
 
-            // Countdown 9, one second per digit
+            // Countdown 9 through 0, one second per digit
             for(sec = 9; ; sec--){
                 displayDigitStatic((int)sec);
                 for(ms = 0; ms < 1000; ms++){
