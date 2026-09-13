@@ -4,6 +4,25 @@ A bare-metal C countdown demo using register-level GPIO, SysTick delays and soft
 
 **Focus:** embedded C, bit manipulation, peripheral registers and timing.
 
+## Hardware demonstration
+
+![Original TM4C123 breadboard demo showing the seven-segment countdown and blue indicator LED](countdown-demo.gif)
+
+[Watch or download the MP4 demo](countdown-demo.mp4) · [View the original timing calculations](systick-calculations.jpeg)
+
+This footage comes from the original May 2025 coursework recording and shows the LaunchPad, breadboard, button, seven-segment display and indicator LED. The approximately 21-second excerpt plays at the recorded speed; its audio was removed and it was compressed for the web. The GIF is a lower-resolution, looping preview.
+
+**Version context:** this recording predates the September 2026 source corrections described below. It illustrates the original hardware project, and does not verify the current firmware's two-second fade or five-second hold.
+
+<details>
+<summary>Original SysTick calculation notes</summary>
+
+![Handwritten SysTick reload calculations for a one-millisecond interval at 16 MHz and 50 MHz](systick-calculations.jpeg)
+
+For a 1 ms interval, `reload = clock_hz / 1000 - 1`. The 16 MHz calculation gives **15,999**, matching this project's clock assumption. The 50 MHz calculation is an alternative example from the original notes; this repository does not configure a 50 MHz clock.
+
+</details>
+
 ## Sequence
 
 1. Detect a high button input, wait 20 ms and check it again.
