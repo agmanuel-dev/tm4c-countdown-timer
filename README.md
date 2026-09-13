@@ -8,7 +8,7 @@ A bare-metal C countdown demo using register-level GPIO, SysTick delays and soft
 
 ![Original TM4C123 breadboard demo showing the seven-segment countdown and blue indicator LED](countdown-demo.gif)
 
-[Watch or download the MP4 demo](countdown-demo.mp4) · [View the original timing calculations](systick-calculations.jpeg)
+[Watch or download the MP4 demo](countdown-demo.mp4?raw=true) · [View the original timing calculations](systick-calculations.jpeg)
 
 This footage comes from the original May 2025 coursework recording and shows the LaunchPad, breadboard, button, seven-segment display and indicator LED. The approximately 21-second excerpt plays at the recorded speed; its audio was removed and it was compressed for the web. The GIF is a lower-resolution, looping preview.
 
